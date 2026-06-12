@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Confirmation</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+}
+
+.container{
+    width:90%;
+    max-width:500px;
+    margin:50px auto;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+}
+
+h1{
+    color:#005bbb;
+}
+
+input{
+    width:90%;
+    padding:15px;
+    margin:10px 0;
+    border:2px solid #ddd;
+    border-radius:10px;
+    font-size:18px;
+}
+
+button{
+    width:95%;
+    padding:15px;
+    margin-top:15px;
+    background:#f5b400;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:22px;
+    font-weight:bold;
+    cursor:pointer;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Payment Confirmation</h1>
+
+<input id="name" type="text" placeholder="Full Name">
+
+<input id="phone" type="text" placeholder="Phone Number">
+
+<input id="txid" type="text" placeholder="Transaction ID">
+
+<button onclick="submitPayment()">
+Submit Payment
+</button>
+
+</div>
+
+<script type="module">
+
+import { auth, db } from "./firebase-config.js";
+
+import { doc, updateDoc }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+window.submitPayment = async function(){
+
+const user = auth.currentUser;
+
+if(!user){
+    alert("Please login first");
+    return;
+}
+
+let name = document.getElementById("name").value;
+let phone = document.getElementById("phone").value;
+let txid = document.getElementById("txid").value;
+
+if(name === "" || phone === "" || txid === ""){
+    alert("Please fill all fields");
+    return;
+}
+
+try{
+
+await updateDoc(
+    doc(db,"users",user.uid),
+    {
+        payment: "submitted",
+        txid: txid
+    }
+);
+
+alert("Payment Submitted Successfully");
+
+window.location.href = "pending.html";
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

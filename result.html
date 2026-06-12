@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Result</title>
+</head>
+<body>
+
+<h1>Exam Finished</h1>
+
+<h2 id="result"></h2>
+
+<script>
+
+let score = localStorage.getItem("score");
+let total = localStorage.getItem("total");
+
+document.getElementById("result").innerHTML =
+"Your Score: " + score + " / " + total;
+
+</script>
+
+</body>
+</html>
